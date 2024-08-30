@@ -1,0 +1,55 @@
+version: "3.9"
+
+networks:
+  task_network:
+
+services:
+  db:
+    container_name: task_bot_db
+    image: postgres
+    mem_limit: 1GB
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: auth_db
+    networks:
+      - task_network
+
+  redis:
+    container_name: task_redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data/dаta:/root/redis
+      - ./redis_data/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=root
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+
+#  auth_service:
+#    container_name: auth_api
+#    mem_limit: 1GB
+#    build: ./auth_api/
+#    ports:
+#      - "8000:8000"
+#    networks:
+#      - task_network
+
+#  task_service:
+#    container_name:
+#      task_api
+#    mem_limit: 1GB
+#    build: ./task_api/
+#    ports:
+#      - "8001:8001"
+#    networks:
+#      - task_network
+

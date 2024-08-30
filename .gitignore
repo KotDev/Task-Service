@@ -1,0 +1,5 @@
+.idea
+.venv
+auth_api/src/settings/certs
+task_api/src/settings/certs
+postgres_data
